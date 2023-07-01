@@ -1165,3 +1165,30 @@ BEGIN
 END;
 
 EXEC UpdateAnimalAge 8, 5
+----------------------------------------------------Adriano---------------------------------------------------
+-----------Basico----------
+--Nos ayuda a proporcionar un resultado que muestra la cantidad de adopciones en cada mes.
+Create function MostrarCantidadAdopcionMes(@month date)
+Returns table
+as
+Return (
+ SELECT MONTH (FechaAdopcion) AS Mes, COUNT(*) AS CantidadAdopciones
+ FROM Animal
+ GROUP BY MONTH (FechaAdopcion);
+);
+-----------Intermedio----------
+----1----
+-- Este procedure nos ayuda a agrupar por albergue y por la raza del animal
+Create Procedure MostrarAnimalesPorRaza
+	
+ SELECT Albergue. NombreAlbergue, Animal. RazaAnimal, COUNT (Animal. IdAnimal)
+ AS TotalAnimales
+ FROM Albergue
+ JOIN Animal ON Albergue. IdAlbergue = Animal. IdAlbergue
+ GROUP BY Albergue. NombreAlbergue, Animal. RazaAnimal;
+----2-----
+-- Este procedure nos ayuda a identificar los alimentos que están por vencer en los próximos 7 días.
+Create Procedure MostrarAlimentosPorVencer @day int)
+ SELECT NombreAlimento, fechavencimiento
+ FROM Alimentos
+ WHERE fechavencimiento <= DATE_ADD (CURDATE (), INTERVAL 7 DAY);

@@ -116,3 +116,35 @@ db.Animal.aggregate([
     }
   }
 ])
+
+-------------------------------------------------------------Adriano---------------------------------
+--
+Obtener la cantidad total de animales por especie en el albergue.
+db.Animal.aggregate([
+  {
+    $group: {
+      _id: "$especie",
+      totalAnimales: { $sum: 1 }
+    }
+  }
+])
+--Obtener la lista de veterinarios y la cantidad de medicamentos que han recetado en orden descendente.
+db.Veterinario.aggregate([
+  {
+    $lookup: {
+      from: "medicamentos",
+      localField: "_id",
+      foreignField: "veterinarioId",
+      as: "medicamentos"
+    }
+  },
+  {
+    $project: {
+      nombre: 1,
+      cantidadMedicamentos: { $size: "$medicamentos" }
+    }
+  },
+  {
+    $sort: { cantidadMedicamentos: -1 }
+  }
+])
